@@ -1,6 +1,0 @@
-Package: glad
-Feature: gl-api-43
-Architecture: x64-windows-static
-Multi-Arch: same
-Description: Imports extensions from OpenGL API specification version 4.3.
-Status: install ok installed
