@@ -1,4 +1,0 @@
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/imgui_x64-windows-static/debug/lib/imguid.lib
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/imgui_x64-windows-static/debug/share/imgui/imgui-config.cmake
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/imgui_x64-windows-static/debug/share/imgui/imgui-targets.cmake
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/imgui_x64-windows-static/debug/share/imgui/imgui-targets-debug.cmake

@@ -1,7 +1,0 @@
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glad_x64-windows-static/lib/glad.lib
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glad_x64-windows-static/include/glad/glad.h
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glad_x64-windows-static/include/KHR/khrplatform.h
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glad_x64-windows-static/lib/cmake/glad/gladConfig.cmake
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glad_x64-windows-static/lib/cmake/glad/gladConfigVersion.cmake
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glad_x64-windows-static/lib/cmake/glad/gladTargets.cmake
-C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glad_x64-windows-static/lib/cmake/glad/gladTargets-release.cmake
