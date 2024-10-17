@@ -1,0 +1,8 @@
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/lib/glfw3.lib
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/include/GLFW/glfw3.h
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/include/GLFW/glfw3native.h
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/lib/cmake/glfw3/glfw3Config.cmake
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/lib/cmake/glfw3/glfw3ConfigVersion.cmake
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/lib/cmake/glfw3/glfw3Targets.cmake
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/lib/cmake/glfw3/glfw3Targets-release.cmake
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/pkgs/glfw3_x64-windows-static/lib/pkgconfig/glfw3.pc

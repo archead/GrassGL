@@ -1,0 +1,8 @@
+# ninja log v5
+3	468	7508894679857135	include/glad/glad.h	acb7b0e25e3f18bf
+3	468	7508894679857135	src/glad.c	acb7b0e25e3f18bf
+3	468	7508894679857135	C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-dbg/include/glad/glad.h	acb7b0e25e3f18bf
+3	468	7508894679857135	C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-dbg/src/glad.c	acb7b0e25e3f18bf
+468	709	7508894682541390	CMakeFiles/glad.dir/src/glad.c.obj	6fef7720be2ddc10
+710	740	7508894682835922	glad.lib	bf2008165ca04866
+740	795	0	CMakeFiles/install.util	dd3b244ae32f0047

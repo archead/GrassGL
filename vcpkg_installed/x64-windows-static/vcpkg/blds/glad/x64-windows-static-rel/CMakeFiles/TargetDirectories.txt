@@ -1,0 +1,7 @@
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-rel/CMakeFiles/glad-generate-files.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-rel/CMakeFiles/glad.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-rel/CMakeFiles/edit_cache.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-rel/CMakeFiles/rebuild_cache.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-rel/CMakeFiles/list_install_components.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-rel/CMakeFiles/install.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glad/x64-windows-static-rel/CMakeFiles/install/local.dir

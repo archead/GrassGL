@@ -1,0 +1,13 @@
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/CMakeFiles/uninstall.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/CMakeFiles/edit_cache.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/CMakeFiles/rebuild_cache.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/CMakeFiles/list_install_components.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/CMakeFiles/install.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/CMakeFiles/install/local.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/src/CMakeFiles/glfw.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/src/CMakeFiles/update_mappings.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/src/CMakeFiles/edit_cache.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/src/CMakeFiles/rebuild_cache.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/src/CMakeFiles/list_install_components.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/src/CMakeFiles/install.dir
+C:/dev/GrassGL/GrassGL/vcpkg_installed/x64-windows-static/vcpkg/blds/glfw3/x64-windows-static-dbg/src/CMakeFiles/install/local.dir
