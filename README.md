@@ -2,6 +2,8 @@
 
 A project used to test GPU Instancing
 
+![image](https://github.com/user-attachments/assets/1a1094a4-8a77-402f-bc77-9e9f7b595d2f)
+
 ## Build
 
 This project relies on [**vcpkg**](https://vcpkg.io/en/) to resolve dependencies which is included in **Visual Studio 2022 [17.6](https://devblogs.microsoft.com/cppblog/vcpkg-is-now-included-with-visual-studio/)** and above
