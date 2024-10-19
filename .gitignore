@@ -17,7 +17,8 @@
 mono_crash.*
 
 # Build results
-vcpkg_installed/
+bin/
+deps/vcpkg_installed/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/

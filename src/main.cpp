@@ -1,11 +1,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-
-
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -45,8 +42,8 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
-bool mouseToggle = false;
-bool enableLighting = false;
+bool mouseToggle = true;
+bool enableLighting = true;
 
 
 Camera camera;
@@ -93,7 +90,6 @@ int main()
 
         glViewport(0, 0, resWidth, resHeight);
 
-
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
@@ -101,7 +97,7 @@ int main()
         ImGui_ImplOpenGL3_Init(glsl_version);
         ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-        //Shader skyboxShader("skybox.vert", "skybox.frag");
+        Shader skyboxShader("assets/shaders/skybox.vert", "assets/shaders/skybox.frag");
         Shader shader("assets/shaders/shader.vert", "assets/shaders/shader.frag");
         shader.use();
 
@@ -124,6 +120,19 @@ int main()
         Texture groundTexture("assets/textures/dirt.png", 0);
         Texture containerTexture("assets/textures/container.jpg", 0);
 
+        std::vector<std::string> faces {
+            "assets/textures/skybox/right.jpg",
+            "assets/textures/skybox/left.jpg",
+            "assets/textures/skybox/top.jpg",
+            "assets/textures/skybox/bottom.jpg",
+            "assets/textures/skybox/front.jpg",
+            "assets/textures/skybox/back.jpg"
+        };
+        unsigned int skyboxTextureID = loadCubemap(faces);
+        skyboxShader.use();
+        skyboxShader.setInt("skybox", 0);
+
+        shader.use();
         const int grassAmmount = 40000;
         glm::vec3* translations = new glm::vec3[grassAmmount];
         int index = 0;
@@ -143,6 +152,7 @@ int main()
         }
         VertexBuffer instanceVBO(translations, grassAmmount * sizeof(glm::vec3));
 
+        // grass buffer
         unsigned int grassVAO;
         VertexBuffer grassVBO(grassVertices, sizeof(grassVertices));
         glGenVertexArrays(1, &grassVAO);
@@ -165,6 +175,7 @@ int main()
         glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
         glBindVertexArray(0);
 
+        // ground buffer
         unsigned int groundVAO;
         VertexBuffer groundVBO(groundVertices, sizeof(groundVertices));
         glGenVertexArrays(1, &groundVAO);
@@ -179,6 +190,7 @@ int main()
         glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
         glBindVertexArray(0);
 
+        // container buffer
         unsigned int containerVAO;
         VertexBuffer containerVBO(containerVertices, sizeof(containerVertices));
         glGenVertexArrays(1, &containerVAO);
@@ -191,6 +203,17 @@ int main()
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
         glEnableVertexAttribArray(3);
         glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+        glBindVertexArray(0);
+
+        // skybox vertex buffer
+        unsigned int skyboxVAO;
+        VertexBuffer skyboxVBO(skyboxVertices, sizeof(skyboxVertices));
+        glGenVertexArrays(1, &skyboxVAO);
+        glBindVertexArray(skyboxVAO);
+        skyboxVBO.bind();
+        glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glBindVertexArray(0);
 
         glEnable(GL_MULTISAMPLE); // MSAA Enable
@@ -206,6 +229,17 @@ int main()
             glClearColor(0.678f, 0.847f, 0.902f, 1.0f);
             glClearDepth(1);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            shader.use();
+            
+            glm::mat4 view = camera.getViewMatrix();
+            // make camera orbit
+            camera.cameraPos = glm::vec3(10.0f * (float)sin(glfwGetTime() * 0.03f), 0.3f, -10.0f * (float)cos(glfwGetTime() * 0.03f));
+            camera.cameraFront =- camera.cameraPos;
+
+            glm::mat4 projection = glm::perspective(glm::radians(camera.fov), (float)resWidth / float(resHeight), 0.1f, 100.0f);
+            glm::mat4 viewProj = projection * view;
+            shader.setMat4("viewProj", viewProj);
 
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::scale(model, glm::vec3(0.5));
@@ -225,15 +259,6 @@ int main()
             shearSlow = glm::shearY3D(shearSlow, shearAngleSlow, 0.0f);
             shader.setMat4("shearSlow", shearSlow);
 
-            glm::mat4 view = camera.getViewMatrix();
-            //camera.cameraPos = glm::vec3(10.0f * (float)sin(glfwGetTime() * 0.03f), 1.0f, -10.0f * (float)cos(glfwGetTime() * 0.03f));
-            //camera.cameraFront =- camera.cameraPos;
-
-            glm::mat4 projection = glm::perspective(glm::radians(camera.fov), (float)resWidth / float(resHeight), 0.1f, 100.0f);
-
-            glm::mat4 viewProj = projection * view;
-            shader.setMat4("viewProj", viewProj);
-
             glActiveTexture(GL_TEXTURE0);
             glBindVertexArray(grassVAO);
             grassTexture.bind();
@@ -251,13 +276,25 @@ int main()
             shader.setVec3("viewPos", camera.cameraPos);
             shader.setFloat("material.shininess", 32.0f);
 
-
             model = glm::scale(model, glm::vec3(1.0f));
             model = glm::translate(model, glm::vec3(0.0f, 0.0f, -1.5f));
             shader.setMat4("model", model);
             containerTexture.bind();
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
+            // skybox
+            glDepthFunc(GL_LEQUAL);
+            skyboxShader.use();
+            skyboxShader.setMat4("projection", projection);
+            view = glm::mat4(glm::mat3(camera.getViewMatrix())); // removes the translations from the view matrix
+            skyboxShader.setMat4("view", view);
+            glBindVertexArray(skyboxVAO);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTextureID);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glDepthFunc(GL_LESS);
+
+            shader.use();
             shader.setBool("enableLighting", enableLighting);
 
             // Start the Dear ImGui frame
@@ -329,6 +366,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 unsigned int loadCubemap(std::vector<std::string> faces)
 {
+
+    stbi_set_flip_vertically_on_load(false);
+
     unsigned int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -339,7 +379,8 @@ unsigned int loadCubemap(std::vector<std::string> faces)
         unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+            // we can iterate through all six texture targets (sides of the cube) with an incrementing int since GL_TEXTURE_CUBE_MAP_POSITIVE_X is just an enum
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
                 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
             );
             stbi_image_free(data);
