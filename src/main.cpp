@@ -85,8 +85,8 @@ int main()
         glfwSetCursorPosCallback(window, mouse_callback);
         //--------------------------------------
 
-        // LOCK AND HIDE MOUSE
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        // LOCK AND HIDE MOUSE (disabled since the demo start in orbit mode)
+        //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         glViewport(0, 0, resWidth, resHeight);
 
@@ -103,8 +103,8 @@ int main()
 
         glm::vec3 dirLightDirection = glm::vec3(-0.9f, -1.5f, -1.9f);
         shader.setVec3("dirLight.direction", dirLightDirection);
-        shader.setVec3("dirLight.ambient", 0.6f, 0.6f, 0.6f);
-        shader.setVec3("dirLight.diffuse", 0.9f, 0.9f, 0.9f);
+        shader.setVec3("dirLight.ambient", 0.7f, 0.5f, 0.2f);
+        shader.setVec3("dirLight.diffuse", 0.9f, 0.7f, 0.2f);
         shader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
         shader.setInt("material.diffuse", 0);
 
@@ -133,7 +133,9 @@ int main()
         skyboxShader.setInt("skybox", 0);
 
         shader.use();
-        const int grassAmmount = 40000;
+
+        // crate offsets for grass intanses
+        const int grassAmmount = 70000;
         glm::vec3* translations = new glm::vec3[grassAmmount];
         int index = 0;
         float offset = 0.01f;
@@ -167,7 +169,7 @@ int main()
 
         instanceVBO.bind();
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        instanceVBO.unbind();
         glVertexAttribDivisor(2, 1);
 
         grassVBO.bind();
@@ -233,9 +235,14 @@ int main()
             shader.use();
             
             glm::mat4 view = camera.getViewMatrix();
+            //camera.cameraPos = glm::vec3(13.0f * (float)sin(50.0 * 0.01f), 0.8f, -12.0f * (float)cos(50.0 * 0.01f));
+            //camera.cameraFront =- camera.cameraPos;
+
+
             // make camera orbit
-            camera.cameraPos = glm::vec3(10.0f * (float)sin(glfwGetTime() * 0.03f), 0.3f, -10.0f * (float)cos(glfwGetTime() * 0.03f));
+            camera.cameraPos = glm::vec3(13.0f * (float)sin(glfwGetTime() * 0.01f), 0.8f, -12.0f * (float)cos(glfwGetTime() * 0.01f));
             camera.cameraFront =- camera.cameraPos;
+
 
             glm::mat4 projection = glm::perspective(glm::radians(camera.fov), (float)resWidth / float(resHeight), 0.1f, 100.0f);
             glm::mat4 viewProj = projection * view;

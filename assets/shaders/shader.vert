@@ -47,10 +47,13 @@ float hash(float n) { return fract(sin(n) * 1e4); } // taken from https://gist.g
 
 
 			float hashedInstance = hash(gl_InstanceID);
-			if(hashedInstance <= 0.3)
-				gl_Position = viewProj * model * shearFast * vec4(aPos.x + offset.x, aPos.y + offset.y, aPos.z + offset.z, 1.0f);
-			else
-				gl_Position = viewProj * model * shearSlow * vec4(aPos.x + offset.x, aPos.y + offset.y, aPos.z + offset.z, 1.0f);
+			if(hashedInstance <= 0.3) {
+				gl_Position = viewProj * model * shearFast * vec4(aPos + offset, 1.0f);
+			}
+			else {
+				gl_Position = viewProj * model * shearSlow * vec4(aPos + offset, 1.0f);
+
+			}
 		}
 
 		else
