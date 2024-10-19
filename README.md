@@ -1,8 +1,7 @@
 # GrassGL
+#### A GPU Instancing Demo
 
-A project used to test GPU Instancing
-
-![image](https://github.com/user-attachments/assets/1a1094a4-8a77-402f-bc77-9e9f7b595d2f)
+![image](https://github.com/user-attachments/assets/152878e2-76d2-4a78-ae02-bf0a43529c37)
 
 ## Build
 
