@@ -29,7 +29,7 @@ const float PI = 3.14159265359;
 	float hashedInstance = hash(gl_InstanceID);
 
 	float swayAmount = 0.1f * (sin(2.0f * time + hashedInstance) + 0.25f * sin(3.0f * time + hashedInstance));
-	swayAmount *= smoothstep(0.3f, 1.0f, 1 - offset.y);
+	swayAmount *= smoothstep(0.3f, 1.0f, 1 - offset.y + 0.3);
 
 	vec3 swayedPos = aPos + offset;
 	swayedPos.x += swayAmount;
