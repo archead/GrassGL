@@ -15,49 +15,37 @@ uniform mat4 model;
 uniform mat4 shearFast;
 uniform mat4 shearSlow;
 uniform mat4 viewProj;
-
-//mat4x4(
-//(1.000000, 0.000000, 0.000000, 0.000000),
-//(0.016770, 1.000000, 0.000000, 0.000000),
-//(0.000000, 0.000000, 1.000000, 0.000000),
-//(0.008385, 0.000000, 0.000000, 1.000000))
+uniform float time;
 
 float hash(float n) { return fract(sin(n) * 1e4); } // taken from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 
  void main()
  {
- 
     vec3 offset = aOffset;
+	float hashedInstance = hash(gl_InstanceID);
+
+	float swayAmount = 0.1f * (sin(2.0f * time + hashedInstance) + 0.25f * sin(3.0f * time + hashedInstance));
+	swayAmount *= smoothstep(0.3f, 1.0f, 1 - offset.y);
+
+	vec3 swayedPos = aPos + offset;
+	swayedPos.x += swayAmount;
+
 	if(gl_InstanceID == 0)
+	{
 		gl_Position = viewProj * model * vec4(aPos, 1.0f);
+	}
+
 	else
 	{
 		if (aPos.y > 0)
 		{
-			mat4 scale;
-			scale[0] = vec4(1.00f, 0.00f, 0.00f, 0.00f);  
-			scale[1] = vec4(0.00f, 1.00f, 0.00f, 0.00f);
-			scale[2] = vec4(0.00f, 0.00f, 1.00f, 0.00f); 
-			scale[3] = vec4(0.00f, 0.00f, 0.00f, 1.00f); 
-			mat4 sFast = scale;
-			mat4 sSlow = scale;
-
-			//sFast[1][0] = shearFast[1][0] / (2 + offset.y);
-			//sSlow[1][0] = shearSlow[1][0] / (2 + offset.y);
-
-
-			float hashedInstance = hash(gl_InstanceID);
-			if(hashedInstance <= 0.3) {
-				gl_Position = viewProj * model * shearFast * vec4(aPos + offset, 1.0f);
-			}
-			else {
-				gl_Position = viewProj * model * shearSlow * vec4(aPos + offset, 1.0f);
-
-			}
+			gl_Position = viewProj * model * vec4(swayedPos, 1.0f);
 		}
 
-		else
+		else 
+		{
 			gl_Position = viewProj * model * vec4(aPos.x + offset.x, aPos.y, aPos.z + offset.z, 1.0f);
+		}
 	}
 
 	FragPos = vec3(model * vec4(aPos, 1.0f));

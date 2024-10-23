@@ -32,6 +32,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 unsigned int loadCubemap(std::vector<std::string> faces);
+void printMatrix(const glm::mat4& matrix);
 
 
 int resWidth = WINDOW_WIDTH;
@@ -61,7 +62,7 @@ int main()
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         const char* glsl_version = "#version 460";
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_SAMPLES, 8); // MSAA 
+        glfwWindowHint(GLFW_SAMPLES, 1); // MSAA 
         glfwSwapInterval(0);
 
         /* Create a windowed mode window and its OpenGL context */
@@ -88,7 +89,7 @@ int main()
         //--------------------------------------
 
         // LOCK AND HIDE MOUSE (disabled since the demo start in orbit mode)
-        //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         glViewport(0, 0, resWidth, resHeight);
 
@@ -212,8 +213,8 @@ int main()
             //camera.cameraFront =- camera.cameraPos;
 
             // make camera orbit
-            camera.cameraPos = glm::vec3(13.0f * (float)sin(glfwGetTime() * 0.01f), 0.8f, -12.0f * (float)cos(glfwGetTime() * 0.01f));
-            camera.cameraFront =- camera.cameraPos;
+            //camera.cameraPos = glm::vec3(13.0f * (float)sin(glfwGetTime() * 0.01f), 0.8f, -12.0f * (float)cos(glfwGetTime() * 0.01f));
+            //camera.cameraFront =- camera.cameraPos;
 
 
             glm::mat4 projection = glm::perspective(glm::radians(camera.fov), (float)resWidth / float(resHeight), 0.1f, 100.0f);
@@ -225,17 +226,7 @@ int main()
             model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
             shader.setMat4("model", model);
 
-            float shearAngleFast = 0.1f * (sin(2.0f * glfwGetTime()) + 0.25f * sin(3.0f * glfwGetTime()));
-            glm::mat4 shearFast = glm::mat4(1.0f);
-            shearFast = glm::translate(shearFast, glm::vec3(0.5 * shearAngleFast, 0.0f, 0.0f));
-            shearFast = glm::shearY3D(shearFast, shearAngleFast, 0.0f);
-            shader.setMat4("shearFast", shearFast);
-
-            float shearAngleSlow = 0.1f * (sin(2.0f * glfwGetTime() + 0.3f) + 0.25f * sin(3.0f * glfwGetTime() + 0.3f));
-            glm::mat4 shearSlow = glm::mat4(1.0f);
-            shearSlow = glm::translate(shearSlow, glm::vec3(0.5 * shearAngleSlow, 0.0f, 0.0f));
-            shearSlow = glm::shearY3D(shearSlow, shearAngleSlow, 0.0f);
-            shader.setMat4("shearSlow", shearSlow);
+            shader.setFloat("time", (float)glfwGetTime());
 
             glActiveTexture(GL_TEXTURE0);
             grassVAO.bind();
@@ -376,4 +367,13 @@ unsigned int loadCubemap(std::vector<std::string> faces)
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
     return textureID;
+}
+
+void printMatrix(const glm::mat4& matrix) {
+    for (int row = 0; row < 4; ++row) {
+        for (int col = 0; col < 4; ++col) {
+            std::cout << matrix[col][row] << " ";
+        }
+        std::cout << std::endl;
+    }
 }
