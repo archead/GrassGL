@@ -191,6 +191,11 @@ int main()
         VertexArray skyboxVAO;
         skyboxVAO.addBuffer(skyboxVBO.getID(), 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
+        glm::mat4 rotationOffsetTemplate = glm::mat4(1.0f);
+        rotationOffsetTemplate = glm::rotate(rotationOffsetTemplate, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        shader.use();
+        shader.setMat4("rotateOffsetTemplate", rotationOffsetTemplate);
+
         glEnable(GL_MULTISAMPLE); // MSAA Enable
         glEnable(GL_DEPTH_TEST);
         while (!glfwWindowShouldClose(window))
