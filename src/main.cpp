@@ -61,7 +61,7 @@ int main()
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         const char* glsl_version = "#version 460";
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_SAMPLES, 16); // MSAA 16x
+        glfwWindowHint(GLFW_SAMPLES, 8); // MSAA 
         glfwSwapInterval(0);
 
         /* Create a windowed mode window and its OpenGL context */
@@ -137,7 +137,7 @@ int main()
         shader.use();
 
         // crate offsets for grass intanses
-        const int grassAmmount = 70000;
+        const int grassAmmount = 40000;
         glm::vec3* translations = new glm::vec3[grassAmmount];
         int index = 0;
         float offset = 0.01f;
@@ -161,23 +161,19 @@ int main()
         grassVBO.bind();
         grassVAO.addBuffer(grassVBO.getID(), 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         grassVAO.addBuffer(grassVBO.getID(), 1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        grassVAO.addBuffer(grassVBO.getID(), 3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 
-        grassVAO.bind();
+        // instance buffer
         VertexBuffer instanceVBO(translations, grassAmmount * sizeof(glm::vec3));
         instanceVBO.bind();
-        glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        instanceVBO.unbind();
+        grassVAO.addBuffer(instanceVBO.getID(), 2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glVertexAttribDivisor(2, 1);
-
-        grassVBO.bind();
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-        glBindVertexArray(0);
+        instanceVBO.unbind();
 
         // ground buffer
         VertexBuffer groundVBO(groundVertices, sizeof(groundVertices));
         VertexArray groundVAO;
+        groundVBO.bind();
         groundVAO.addBuffer(groundVBO.getID(), 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         groundVAO.addBuffer(groundVBO.getID(), 1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
         groundVAO.addBuffer(groundVBO.getID(), 3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -190,15 +186,9 @@ int main()
         containerVAO.addBuffer(containerVBO.getID(), 3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 
         // skybox vertex buffer
-        unsigned int skyboxVAO;
         VertexBuffer skyboxVBO(skyboxVertices, sizeof(skyboxVertices));
-        glGenVertexArrays(1, &skyboxVAO);
-        glBindVertexArray(skyboxVAO);
-        skyboxVBO.bind();
-        glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        glBindVertexArray(0);
+        VertexArray skyboxVAO;
+        skyboxVAO.addBuffer(skyboxVBO.getID(), 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
         glEnable(GL_MULTISAMPLE); // MSAA Enable
         glEnable(GL_DEPTH_TEST);
@@ -217,13 +207,13 @@ int main()
             shader.use();
             
             glm::mat4 view = camera.getViewMatrix();
+
             //camera.cameraPos = glm::vec3(13.0f * (float)sin(50.0 * 0.01f), 0.8f, -12.0f * (float)cos(50.0 * 0.01f));
             //camera.cameraFront =- camera.cameraPos;
 
-
             // make camera orbit
-            //camera.cameraPos = glm::vec3(13.0f * (float)sin(glfwGetTime() * 0.01f), 0.8f, -12.0f * (float)cos(glfwGetTime() * 0.01f));
-            //camera.cameraFront =- camera.cameraPos;
+            camera.cameraPos = glm::vec3(13.0f * (float)sin(glfwGetTime() * 0.01f), 0.8f, -12.0f * (float)cos(glfwGetTime() * 0.01f));
+            camera.cameraFront =- camera.cameraPos;
 
 
             glm::mat4 projection = glm::perspective(glm::radians(camera.fov), (float)resWidth / float(resHeight), 0.1f, 100.0f);
@@ -235,14 +225,13 @@ int main()
             model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
             shader.setMat4("model", model);
 
-            float sNoise = glm::simplex(glm::vec2((float)glfwGetTime() / 3.0f, (float)glfwGetTime() / 8.0f));
-            float shearAngleFast = 0.2f * sNoise * (float)sin(sin(glfwGetTime()));
+            float shearAngleFast = 0.1f * (sin(2.0f * glfwGetTime()) + 0.25f * sin(3.0f * glfwGetTime()));
             glm::mat4 shearFast = glm::mat4(1.0f);
             shearFast = glm::translate(shearFast, glm::vec3(0.5 * shearAngleFast, 0.0f, 0.0f));
             shearFast = glm::shearY3D(shearFast, shearAngleFast, 0.0f);
             shader.setMat4("shearFast", shearFast);
 
-            float shearAngleSlow = 0.2f * sNoise * (float)sin(sin(glfwGetTime() + 0.3f));
+            float shearAngleSlow = 0.1f * (sin(2.0f * glfwGetTime() + 0.3f) + 0.25f * sin(3.0f * glfwGetTime() + 0.3f));
             glm::mat4 shearSlow = glm::mat4(1.0f);
             shearSlow = glm::translate(shearSlow, glm::vec3(0.5 * shearAngleSlow, 0.0f, 0.0f));
             shearSlow = glm::shearY3D(shearSlow, shearAngleSlow, 0.0f);
@@ -250,7 +239,6 @@ int main()
 
             glActiveTexture(GL_TEXTURE0);
             grassVAO.bind();
-            //glBindVertexArray(grassVAO);
             grassTexture.bind();
             //glDrawArrays(GL_TRIANGLES, 0, 18);
             glDrawArraysInstanced(GL_TRIANGLES, 0, 18, grassAmmount);
@@ -278,7 +266,7 @@ int main()
             skyboxShader.setMat4("projection", projection);
             view = glm::mat4(glm::mat3(camera.getViewMatrix())); // removes the translations from the view matrix
             skyboxShader.setMat4("view", view);
-            glBindVertexArray(skyboxVAO);
+            skyboxVAO.bind();
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTextureID);
             glDrawArrays(GL_TRIANGLES, 0, 36);

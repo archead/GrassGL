@@ -26,5 +26,4 @@ void VertexArray::addBuffer(GLuint bufferID, GLuint index, GLint size, GLenum ty
 	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 	glVertexAttribPointer(index, size, type, normalized, stride, pointer);
 	glEnableVertexAttribArray(index);
-	unbind();
 }
