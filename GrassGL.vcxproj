@@ -169,11 +169,13 @@
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\VertexBuffer.h" />
     <ClInclude Include="include\Vertices.h" />
+    <ClInclude Include="include\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\ElementBuffer.cpp" />
     <ClCompile Include="include\VertexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="include\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\container.jpg" />

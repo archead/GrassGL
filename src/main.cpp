@@ -16,6 +16,8 @@
 #include "../include/texture.h"
 #include "../include/VertexBuffer.h"
 #include "../include/Vertices.h"
+#include "../include/VertexArray.h"
+
 #include <vector>
 
 #include <imgui.h>
@@ -152,22 +154,18 @@ int main()
                 translations[index++] = translation;
             }
         }
-        VertexBuffer instanceVBO(translations, grassAmmount * sizeof(glm::vec3));
 
         // grass buffer
-        unsigned int grassVAO;
+        VertexArray grassVAO;
         VertexBuffer grassVBO(grassVertices, sizeof(grassVertices));
-        glGenVertexArrays(1, &grassVAO);
-        glBindVertexArray(grassVAO);
         grassVBO.bind();
-        glBufferData(GL_ARRAY_BUFFER, sizeof(grassVertices), grassVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-        glEnableVertexAttribArray(2);
+        grassVAO.addBuffer(grassVBO.getID(), 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        grassVAO.addBuffer(grassVBO.getID(), 1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
+        grassVAO.bind();
+        VertexBuffer instanceVBO(translations, grassAmmount * sizeof(glm::vec3));
         instanceVBO.bind();
+        glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         instanceVBO.unbind();
         glVertexAttribDivisor(2, 1);
@@ -178,34 +176,18 @@ int main()
         glBindVertexArray(0);
 
         // ground buffer
-        unsigned int groundVAO;
         VertexBuffer groundVBO(groundVertices, sizeof(groundVertices));
-        glGenVertexArrays(1, &groundVAO);
-        glBindVertexArray(groundVAO);
-        groundVBO.bind();
-        glBufferData(GL_ARRAY_BUFFER, sizeof(groundVertices), groundVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-        glBindVertexArray(0);
+        VertexArray groundVAO;
+        groundVAO.addBuffer(groundVBO.getID(), 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        groundVAO.addBuffer(groundVBO.getID(), 1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        groundVAO.addBuffer(groundVBO.getID(), 3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 
         // container buffer
-        unsigned int containerVAO;
         VertexBuffer containerVBO(containerVertices, sizeof(containerVertices));
-        glGenVertexArrays(1, &containerVAO);
-        glBindVertexArray(containerVAO);
-        containerVBO.bind();
-        glBufferData(GL_ARRAY_BUFFER, sizeof(containerVertices), containerVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-        glBindVertexArray(0);
+        VertexArray containerVAO;
+        containerVAO.addBuffer(containerVBO.getID(), 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        containerVAO.addBuffer(containerVBO.getID(), 1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        containerVAO.addBuffer(containerVBO.getID(), 3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 
         // skybox vertex buffer
         unsigned int skyboxVAO;
@@ -240,8 +222,8 @@ int main()
 
 
             // make camera orbit
-            camera.cameraPos = glm::vec3(13.0f * (float)sin(glfwGetTime() * 0.01f), 0.8f, -12.0f * (float)cos(glfwGetTime() * 0.01f));
-            camera.cameraFront =- camera.cameraPos;
+            //camera.cameraPos = glm::vec3(13.0f * (float)sin(glfwGetTime() * 0.01f), 0.8f, -12.0f * (float)cos(glfwGetTime() * 0.01f));
+            //camera.cameraFront =- camera.cameraPos;
 
 
             glm::mat4 projection = glm::perspective(glm::radians(camera.fov), (float)resWidth / float(resHeight), 0.1f, 100.0f);
@@ -267,18 +249,19 @@ int main()
             shader.setMat4("shearSlow", shearSlow);
 
             glActiveTexture(GL_TEXTURE0);
-            glBindVertexArray(grassVAO);
+            grassVAO.bind();
+            //glBindVertexArray(grassVAO);
             grassTexture.bind();
             //glDrawArrays(GL_TRIANGLES, 0, 18);
             glDrawArraysInstanced(GL_TRIANGLES, 0, 18, grassAmmount);
 
             model = glm::mat4(1.0f);
             shader.setMat4("model", model);
-            glBindVertexArray(groundVAO);
+            groundVAO.bind();
             groundTexture.bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
 
-            glBindVertexArray(containerVAO);
+            containerVAO.bind();
 
             shader.setVec3("viewPos", camera.cameraPos);
             shader.setFloat("material.shininess", 32.0f);

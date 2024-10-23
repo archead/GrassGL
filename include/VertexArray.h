@@ -1,15 +1,20 @@
 #pragma once
+#ifndef VERTEX_ARRAY_H
+#define VERTEX_ARRAY_H
 
-#include "VertexBuffer.h"
+#include <glad/glad.h>
 
-class VertexArray
-{
-private:
-
+class VertexArray {
 public:
-	VertexArray();
-	~VertexArray();
+    VertexArray();  // Constructor
+    ~VertexArray(); // Destructor
 
-	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
+    void bind() const;  // Bind the VAO
+    void unbind() const; // Unbind the VAO
+    void addBuffer(GLuint bufferID, GLuint index, GLint size, GLenum type, GLboolean normalized = GL_FALSE, GLsizei stride = 0, const void* pointer = nullptr);
+
+private:
+    GLuint vaoID; // VAO identifier
 };
 
+#endif // VERTEX_ARRAY_H

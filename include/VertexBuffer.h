@@ -9,5 +9,6 @@ public:
 
 	void bind() const;
 	void unbind() const;
+	unsigned int getID() const;
 };
 
