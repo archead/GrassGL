@@ -33,6 +33,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 unsigned int loadCubemap(std::vector<std::string> faces);
 void printMatrix(const glm::mat4& matrix);
+void adjustMSAA(int MSAAScale);
 
 
 int resWidth = WINDOW_WIDTH;
@@ -48,8 +49,20 @@ float lastFrame = 0.0f; // Time of last frame
 bool mouseToggle = true;
 bool enableLighting = true;
 
+enum MSAA
+{
+    MSAA_1X = 1, // Custom value of 1
+    MSAA_2X = 2, // Custom value of 2
+    MSAA_4X = 4, // Custom value of 4
+    MSAA_8X = 8,  // Custom value of 8
+    MSAA_16X = 16  // Custom value of 16
+
+};
+
+int currentMSAA = MSAA_1X;
 
 Camera camera;
+
 int main()
 {
         GLFWwindow* window;
@@ -62,7 +75,8 @@ int main()
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         const char* glsl_version = "#version 460";
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_SAMPLES, 1); // MSAA 
+
+        glfwWindowHint(GLFW_SAMPLES, currentMSAA); // MSAA 
         glfwSwapInterval(0);
 
         /* Create a windowed mode window and its OpenGL context */
@@ -150,7 +164,7 @@ int main()
                 float ySNoise = glm::simplex(glm::vec2((float)x, (float)y) / 100.0f);
                 glm::vec3 translation;
                 translation.x = (float)x / 8.0f + xzSNoise;
-                translation.y = ySNoise * 0.7;
+                translation.y = ySNoise * 0.5;
                 translation.z = (float)y / 8.0f + xzSNoise;
                 translations[index++] = translation;
             }
@@ -198,6 +212,9 @@ int main()
 
         glEnable(GL_MULTISAMPLE); // MSAA Enable
         glEnable(GL_DEPTH_TEST);
+
+        camera.cameraPos = glm::normalize(glm::vec3(2.0f, 1.0f, 2.0f));
+
         while (!glfwWindowShouldClose(window))
         {
             processInput(window);
@@ -277,9 +294,17 @@ int main()
             ImGui::NewFrame();
             {
                 ImGui::Begin("Debug Menu");
+
                 ImGui::Text("Sunlight Direction Vector");
                 ImGui::SliderFloat3("XYZ", glm::value_ptr(dirLightDirection), -10.0f, 0.0f);
+
+                ImGui::Text("NOT IMPLEMENTED MSAA Level:", currentMSAA);
+                if (ImGui::SliderInt("X", &currentMSAA, 1, 4)) {
+                    adjustMSAA(currentMSAA);
+                }
+
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+                
                 ImGui::End();
             }
             //dirLightDirection.x = sin(glfwGetTime()) * 5.0;
@@ -295,6 +320,10 @@ int main()
 
         glfwTerminate();
 	return 0;
+}
+
+void adjustMSAA(int MSAAScale) {
+    glfwWindowHint(GLFW_SAMPLES, MSAA_1X + MSAAScale);
 }
 
 void processInput(GLFWwindow* window)
