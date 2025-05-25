@@ -21,8 +21,8 @@
 #include <vector>
 
 #include <imgui.h>
-#include <imgui_impl_opengl3.h>
-#include <imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -114,8 +114,8 @@ int main()
         ImGui_ImplOpenGL3_Init(glsl_version);
         ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-        Shader skyboxShader("assets/shaders/skybox.vert", "assets/shaders/skybox.frag");
-        Shader shader("assets/shaders/shader.vert", "assets/shaders/shader.frag");
+        Shader skyboxShader(RESOURCES_PATH"/shaders/skybox.vert", RESOURCES_PATH"/shaders/skybox.frag");
+        Shader shader(RESOURCES_PATH"/shaders/shader.vert", RESOURCES_PATH"/shaders/shader.frag");
         shader.use();
 
         glm::vec3 dirLightDirection = glm::vec3(-0.9f, -1.5f, -1.9f);
@@ -126,7 +126,7 @@ int main()
         shader.setInt("material.diffuse", 0);
 
         shader.use();
-        Texture grassTexture("assets/textures/grass6.png", 0);
+        Texture grassTexture(RESOURCES_PATH"/textures/grass6.png", 0);
         grassTexture.bind();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -134,16 +134,16 @@ int main()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         grassTexture.unbind();
 
-        Texture groundTexture("assets/textures/dirt.png", 0);
-        Texture containerTexture("assets/textures/container.jpg", 0);
+        Texture groundTexture(RESOURCES_PATH"/textures/dirt.png", 0);
+        Texture containerTexture(RESOURCES_PATH"/textures/container.jpg", 0);
 
         std::vector<std::string> faces {
-            "assets/textures/skybox/right.jpg",
-            "assets/textures/skybox/left.jpg",
-            "assets/textures/skybox/top.jpg",
-            "assets/textures/skybox/bottom.jpg",
-            "assets/textures/skybox/front.jpg",
-            "assets/textures/skybox/back.jpg"
+            RESOURCES_PATH"/textures/skybox/right.jpg",
+            RESOURCES_PATH"/textures/skybox/left.jpg",
+            RESOURCES_PATH"/textures/skybox/top.jpg",
+            RESOURCES_PATH"/textures/skybox/bottom.jpg",
+            RESOURCES_PATH"/textures/skybox/front.jpg",
+            RESOURCES_PATH"/textures/skybox/back.jpg"
         };
         unsigned int skyboxTextureID = loadCubemap(faces);
         skyboxShader.use();

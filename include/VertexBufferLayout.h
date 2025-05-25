@@ -28,23 +28,22 @@ public:
 	template<>
 	void Push<float>(int count)
 	{
-		m_Elements.push_back({ GL_FLOAT, count, false });
-		m_Stride += sizeof(GLfloat);
+		m_Elements.push_back({ static_cast<unsigned int>(GL_FLOAT), static_cast<unsigned int>(count), false });
+		m_Stride += sizeof(GLfloat) * count;
 	}
 
 	template<>
 	void Push<unsigned int>(int count)
 	{
-		m_Elements.push_back({ GL_UNSIGNED_INT, count, false });
-		m_Stride += sizeof(GLuint);
-
+		m_Elements.push_back({ static_cast<unsigned int>(GL_UNSIGNED_INT), static_cast<unsigned int>(count), false });
+		m_Stride += sizeof(GLuint) * count;
 	}
 
 	template<>
 	void Push<unsigned char>(int count)
 	{
-		m_Elements.push_back({ GL_UNSIGNED_BYTE, count, true });
-		m_Stride += sizeof(GLubyte);
+		m_Elements.push_back({ static_cast<unsigned int>(GL_UNSIGNED_BYTE), static_cast<unsigned int>(count), true });
+		m_Stride += sizeof(GLubyte) * count;
 	}
 
 	inline const std::vector<VertexBufferElement> GetElements() const { return m_Elements; }
